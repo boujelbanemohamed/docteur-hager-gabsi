@@ -29,3 +29,20 @@ const menu=document.querySelector('.mobile-menu');const nav=document.querySelect
     if (name) window.gtag('event', name, { transport_type: 'beacon' });
   });
 })();
+
+// Close the mobile navigation after choosing a page, or pressing Escape.
+if (menu && nav) {
+  function closeMobileNavigation() {
+    nav.classList.remove('open');
+    menu.setAttribute('aria-expanded', 'false');
+  }
+  nav.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMobileNavigation);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && nav.classList.contains('open')) {
+      closeMobileNavigation();
+      menu.focus();
+    }
+  });
+}
