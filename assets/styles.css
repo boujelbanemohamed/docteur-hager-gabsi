@@ -55,3 +55,28 @@
 .access-facts li{padding-inline-start:4px;margin:12px 0;line-height:1.6}
 @media(max-width:760px){.hero-services{gap:10px 14px}.hero-services li{font-size:.88rem}.hero-location{font-size:.95rem}.access-facts li{margin:16px 0}}
 @media(max-width:360px){.hero-services{grid-template-columns:1fr}}
+
+/* Focused home presentation and clearer navigation. */
+.hero-grid{min-height:0;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:48px}
+.hero{padding:42px 0 52px}
+.hero h1{font-size:clamp(2rem,3.4vw,2.85rem);margin:.4em 0}
+.hero .lead{max-width:620px}
+.hero-doctor{width:min(100%,340px);justify-self:center;padding:24px 24px 16px;text-align:center}
+.hero-doctor img{width:280px;height:290px;max-width:100%;object-fit:contain;aspect-ratio:auto;margin:auto;background:#f4f3ed}
+.hero-doctor figcaption{position:static;width:auto;height:auto;overflow:visible;clip:auto;font-size:.88rem;font-weight:650;color:var(--teal-dark);margin-top:14px}
+.hero-practical{margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.hero-practical .hero-location{margin-top:0}
+.hero-practical .subtle{font-size:.85rem;margin-bottom:0}
+.footer-publications{margin-top:24px!important;font-size:.9rem}
+@media(max-width:760px){
+ .hero{padding:26px 0 36px}
+ .hero-grid{grid-template-columns:minmax(0,1fr);gap:28px}
+ .hero h1{font-size:clamp(1.8rem,7vw,2.2rem)}
+ .hero h1 span{font-size:.76em;line-height:1.25;margin-top:7px}
+ .hero .lead{font-size:1rem;margin-bottom:12px}
+ .hero-review-badge{margin-top:12px!important}
+ .hero-actions{margin-top:12px}
+ .hero-practical{margin-top:18px;padding-top:14px}
+ .hero-doctor{width:min(100%,328px)}
+ .main-nav a{min-height:44px}
+}
