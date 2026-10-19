@@ -45,3 +45,13 @@
  .mobile-menu{min-width:44px;min-height:44px}
  html{scroll-padding-top:110px;scroll-padding-bottom:100px}
 }
+
+/* Short, scannable practical information on the home pages. */
+.hero-location{margin:14px 0 12px;color:var(--muted)}
+.hero-services{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;list-style:none;padding:0;margin:0 0 18px}
+.hero-services li{display:flex;align-items:baseline;gap:8px;font-size:.95rem}
+.hero-services li::before{content:"✓";color:var(--teal);font-weight:700}
+.access-facts{padding-inline-start:22px;max-width:850px}
+.access-facts li{padding-inline-start:4px;margin:12px 0;line-height:1.6}
+@media(max-width:760px){.hero-services{gap:10px 14px}.hero-services li{font-size:.88rem}.hero-location{font-size:.95rem}.access-facts li{margin:16px 0}}
+@media(max-width:360px){.hero-services{grid-template-columns:1fr}}
