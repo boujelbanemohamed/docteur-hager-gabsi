@@ -21,3 +21,14 @@
 /* Keep the speciality visible above the floating address card. */
 .model-portrait-caption{bottom:66px}.research-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:760px){.model-portrait-caption{bottom:66px}.research-grid{grid-template-columns:1fr}}
+/* Keep all three actions reachable whenever navigation switches to its compact menu. */
+@media(max-width:1050px){
+ .model-refined{padding-bottom:calc(94px + env(safe-area-inset-bottom,0px))}
+ .model-refined .mobile-contact-bar{position:fixed;z-index:60;bottom:0;inset-inline:0;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr) minmax(0,1fr);gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:#fffffff5;backdrop-filter:blur(12px);border-top:1px solid var(--line);box-shadow:0 -4px 20px #0224480c}
+ .model-refined .mobile-contact-bar a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:60px;padding:9px 5px;border-radius:8px;font-size:11px;font-weight:600;line-height:1.35;text-align:center;text-decoration:none}
+ .model-refined .mobile-contact-bar svg{width:20px;height:20px;flex-shrink:0}
+ .model-refined .mobile-contact-call{color:white;background:var(--navy);border:1px solid var(--navy)}
+ .model-refined .mobile-contact-reviews{color:var(--navy);background:white;border:1px solid #d9e4e9}
+ .model-refined .mobile-contact-reviews svg{color:#9c711c}
+ .model-refined .mobile-contact-directions{color:var(--navy);background:#ebf3f5;border:1px solid #d9e4e9}
+}
