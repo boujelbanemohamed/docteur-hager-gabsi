@@ -46,3 +46,50 @@ if (menu && nav) {
     }
   });
 }
+
+// Search and category filters keep all FAQ answers available in the static HTML.
+(function () {
+  var input = document.getElementById('faq-search');
+  var list = document.getElementById('faq-list');
+  if (!input || !list) return;
+  var items = Array.from(list.querySelectorAll('details'));
+  var buttons = Array.from(document.querySelectorAll('[data-faq-filter]'));
+  var status = document.querySelector('.faq-status');
+  var category = 'all';
+  function normalize(value) {
+    return value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f\u064b-\u065f\u0670]/g, '').replace(/[أإآ]/g, 'ا').replace(/ى/g, 'ي');
+  }
+  function filter() {
+    var words = normalize(input.value.trim()).split(/\s+/).filter(Boolean);
+    var count = 0;
+    items.forEach(function (item) {
+      var matches = (category === 'all' || item.dataset.faqCategory === category) && words.every(function (word) { return normalize(item.textContent).indexOf(word) !== -1; });
+      item.hidden = !matches;
+      if (matches) count++;
+    });
+    status.hidden = !words.length && category === 'all';
+    status.textContent = count ? count + ' ' + status.dataset.resultWord : status.dataset.emptyText;
+  }
+  input.addEventListener('input', filter);
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function () {
+      category = button.dataset.faqFilter;
+      buttons.forEach(function (other) { other.setAttribute('aria-pressed', String(other === button)); });
+      filter();
+    });
+  });
+  // A shared link to a question resets filters so the answer stays visible.
+  function revealHash() {
+    var id;
+    try { id = decodeURIComponent(location.hash.slice(1)); } catch (_) { return; }
+    var target = document.getElementById(id);
+    if (!target || !list.contains(target)) return;
+    input.value = '';
+    category = 'all';
+    buttons.forEach(function (button) { button.setAttribute('aria-pressed', String(button.dataset.faqFilter === 'all')); });
+    filter();
+    target.open = true;
+  }
+  window.addEventListener('hashchange', revealHash);
+  revealHash();
+})();
