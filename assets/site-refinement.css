@@ -18,3 +18,6 @@
 [dir=rtl] .model-home-hero h1,[dir=rtl] .model-home-hero h1 .model-hero-place{letter-spacing:0;line-height:1.45}[dir=rtl] .model-home-hero .model-doctor-name{font-family:Tahoma,Arial,sans-serif}[dir=rtl] .model-portrait-caption strong{font-family:Tahoma,Arial,sans-serif;letter-spacing:0;font-size:19px}[dir=rtl] .model-home-hero .hero-actions .btn{direction:rtl}[dir=rtl] .model-hero-pills>span{letter-spacing:0}[dir=rtl] .faq-question-label{letter-spacing:0}[dir=rtl] .model-refined .main-nav a{font-size:11px}
 .model-portrait-card>img{object-position:center top}.model-refined .home-advice .advice-card>img{object-fit:cover;height:auto;aspect-ratio:512/279}.model-refined .home-advice .advice-card{border-radius:14px}.model-refined .home-advice .copy{padding:24px}
 @media(max-width:760px){.model-portrait-card>img{object-position:center top}}
+/* Keep the speciality visible above the floating address card. */
+.model-portrait-caption{bottom:66px}.research-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:760px){.model-portrait-caption{bottom:66px}.research-grid{grid-template-columns:1fr}}
