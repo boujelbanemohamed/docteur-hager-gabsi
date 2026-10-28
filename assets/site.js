@@ -23,10 +23,16 @@ const menu=document.querySelector('.mobile-menu');const nav=document.querySelect
     var link = event.target.closest && event.target.closest('a[href]');
     if (!link) return;
     var href = link.getAttribute('href');
-    var name = link.classList.contains('mobile-contact-reviews') ? 'google_reviews_click' : href.indexOf('tel:') === 0 ? 'contact_phone_click' :
+    var name = link.classList.contains('mobile-contact-reviews') ? 'google_reviews_click' :
+      (/prendre-rendez-vous-gynecologue\.html/i.test(href) || /lerdvmedical\.tn|yesrdv\.com/i.test(href)) ? 'appointment_click' :
+      href.indexOf('tel:') === 0 ? 'contact_phone_click' :
       href.indexOf('mailto:') === 0 ? 'contact_email_click' :
       (href.indexOf('https://maps.app.goo.gl/') === 0 || href.indexOf('https://www.google.com/maps') === 0 || href.indexOf('https://google.com/maps') === 0) ? 'google_maps_click' : null;
-    if (name) window.gtag('event', name, { transport_type: 'beacon' });
+    if (name) window.gtag('event', name, {
+      transport_type: 'beacon',
+      link_url: href,
+      link_text: (link.textContent || '').trim().slice(0, 100)
+    });
   });
 })();
 
