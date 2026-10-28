@@ -20,3 +20,11 @@
  .mobile-contact-directions{border-color:#d9e4e9}
 }
 @media(max-width:350px){.mobile-contact-bar{gap:6px;padding-inline:8px}.mobile-contact-bar a{font-size:10px}}
+
+
+/* SEO local: informations d'accès par quartier */
+.local-access-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:22px 0}
+.local-access-grid>div{padding:18px;border:1px solid var(--border,#e5e7eb);border-radius:12px;background:var(--surface,#fff)}
+.local-access-grid h3{font-size:16px;line-height:1.4;margin:0 0 8px}
+.local-access-grid p{margin:0}
+@media(max-width:760px){.local-access-grid{grid-template-columns:1fr;gap:12px}.local-access-grid>div{padding:15px}}
