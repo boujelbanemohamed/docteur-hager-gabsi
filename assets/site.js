@@ -12,19 +12,17 @@ const menu=document.querySelector('.mobile-menu');const nav=document.querySelect
   if (window.cabinetGAInitialized) return;
   window.cabinetGAInitialized = true;
 
-  // Normalize the duplicate homepage URL /index.html to the canonical directory URL.
-  // The HTML canonical tag remains the primary SEO signal; this also cleans the
-  // address bar and prevents internal visits being split across two URL variants.
-  if (/\\/index\\.html$/.test(window.location.pathname)) {
-    var cleanPath = window.location.pathname.replace(/index\\.html$/, '');
+  // Normalize /index.html to the canonical directory URL without reloading.
+  var currentPath = window.location.pathname;
+  if (currentPath.toLowerCase().endsWith('/index.html')) {
+    var cleanPath = currentPath.slice(0, -'index.html'.length);
     window.history.replaceState(null, document.title, cleanPath + window.location.search + window.location.hash);
   }
 
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
-  // GTM may also be installed on the page. Disable automatic page_view here so
-  // the direct GA4 tag cannot create a second page_view.
+  // Keep automatic page_view disabled here; GTM is the single page_view source.
   window.gtag('config', 'G-0VY997YCWE', {
     send_page_view: false,
     allow_google_signals: true,
@@ -53,16 +51,29 @@ const menu=document.querySelector('.mobile-menu');const nav=document.querySelect
 
     var href = link.href || '';
     var rawHref = link.getAttribute('href') || '';
+    var lowerHref = href.toLowerCase();
     var label = ((link.textContent || '') + ' ' + (link.getAttribute('aria-label') || '')).toLowerCase();
-    var isPhone = /^tel:/i.test(rawHref);
+    var isPhone = rawHref.toLowerCase().indexOf('tel:') === 0;
     var isAppointment = /rendez-vous|prendre rendez-vous|appointment|rdv/i.test(label) ||
-      /prendre-rendez-vous-gynecologue\\.html|lerdvmedical\\.tn|yesrdv\\.com/i.test(href);
-    var isMaps = /(^https?:\\/\\/(maps\\.app\\.goo\\.gl|www\\.google\\.com\\/maps|google\\.com\\/maps|maps\\.google\\.com)\\/)/i.test(href) ||
-      /itinéraire google maps|google maps/i.test(label);
+      lowerHref.indexOf('prendre-rendez-vous-gynecologue.html') !== -1 ||
+      lowerHref.indexOf('lerdvmedical.tn') !== -1 ||
+      lowerHref.indexOf('yesrdv.com') !== -1;
+
+    var isMaps = false;
+    try {
+      var parsedUrl = new URL(href);
+      var host = parsedUrl.hostname.toLowerCase();
+      isMaps = host === 'maps.app.goo.gl' ||
+        ((host === 'google.com' || host === 'www.google.com' || host === 'maps.google.com') &&
+          parsedUrl.pathname.toLowerCase().indexOf('/maps') === 0);
+    } catch (_) {
+      isMaps = label.indexOf('itinéraire google maps') !== -1 || label.indexOf('google maps') !== -1;
+    }
+    if (!isMaps && (label.indexOf('itinéraire google maps') !== -1 || label.indexOf('google maps') !== -1)) isMaps = true;
 
     if (isPhone) sendEvent('contact_phone_click', link, { contact_method: 'phone' });
     if (isAppointment) sendEvent('appointment_click', link, { appointment_method: isPhone ? 'phone' : 'online_or_page' });
-    if (/^mailto:/i.test(rawHref)) sendEvent('contact_email_click', link, { contact_method: 'email' });
+    if (rawHref.toLowerCase().indexOf('mailto:') === 0) sendEvent('contact_email_click', link, { contact_method: 'email' });
     if (isMaps) sendEvent('google_maps_click', link, { destination_type: 'directions' });
     if (link.classList.contains('mobile-contact-reviews')) sendEvent('google_reviews_click', link);
   });
