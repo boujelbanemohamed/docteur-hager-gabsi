@@ -11,28 +11,60 @@ const menu=document.querySelector('.mobile-menu');const nav=document.querySelect
 (function () {
   if (window.cabinetGAInitialized) return;
   window.cabinetGAInitialized = true;
+
+  // Normalize the duplicate homepage URL /index.html to the canonical directory URL.
+  // The HTML canonical tag remains the primary SEO signal; this also cleans the
+  // address bar and prevents internal visits being split across two URL variants.
+  if (/\\/index\\.html$/.test(window.location.pathname)) {
+    var cleanPath = window.location.pathname.replace(/index\\.html$/, '');
+    window.history.replaceState(null, document.title, cleanPath + window.location.search + window.location.hash);
+  }
+
   window.dataLayer = window.dataLayer || [];
   window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
-  window.gtag('config', 'G-0VY997YCWE', { send_page_view: false, allow_google_signals: true, allow_ad_personalization_signals: false });
+  // GTM may also be installed on the page. Disable automatic page_view here so
+  // the direct GA4 tag cannot create a second page_view.
+  window.gtag('config', 'G-0VY997YCWE', {
+    send_page_view: false,
+    allow_google_signals: true,
+    allow_ad_personalization_signals: false
+  });
+
   var tag = document.createElement('script');
   tag.async = true;
   tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-0VY997YCWE';
   document.head.appendChild(tag);
+
+  function sendEvent(name, link, extra) {
+    var params = {
+      transport_type: 'beacon',
+      link_url: link.href,
+      link_text: (link.textContent || link.getAttribute('aria-label') || '').trim().slice(0, 100),
+      page_path: window.location.pathname
+    };
+    if (extra) Object.keys(extra).forEach(function (key) { params[key] = extra[key]; });
+    window.gtag('event', name, params);
+  }
+
   document.addEventListener('click', function (event) {
     var link = event.target.closest && event.target.closest('a[href]');
     if (!link) return;
-    var href = link.getAttribute('href');
-    var name = link.classList.contains('mobile-contact-reviews') ? 'google_reviews_click' :
-      (/prendre-rendez-vous-gynecologue\.html/i.test(href) || /lerdvmedical\.tn|yesrdv\.com/i.test(href)) ? 'appointment_click' :
-      href.indexOf('tel:') === 0 ? 'contact_phone_click' :
-      href.indexOf('mailto:') === 0 ? 'contact_email_click' :
-      (href.indexOf('https://maps.app.goo.gl/') === 0 || href.indexOf('https://www.google.com/maps') === 0 || href.indexOf('https://google.com/maps') === 0) ? 'google_maps_click' : null;
-    if (name) window.gtag('event', name, {
-      transport_type: 'beacon',
-      link_url: href,
-      link_text: (link.textContent || '').trim().slice(0, 100)
-    });
+
+    var href = link.href || '';
+    var rawHref = link.getAttribute('href') || '';
+    var label = ((link.textContent || '') + ' ' + (link.getAttribute('aria-label') || '')).toLowerCase();
+    var isPhone = /^tel:/i.test(rawHref);
+    var isAppointment = /rendez-vous|prendre rendez-vous|appointment|rdv/i.test(label) ||
+      /prendre-rendez-vous-gynecologue\\.html|lerdvmedical\\.tn|yesrdv\\.com/i.test(href);
+    var isMaps = /(^https?:\\/\\/(maps\\.app\\.goo\\.gl|www\\.google\\.com\\/maps|google\\.com\\/maps|maps\\.google\\.com)\\/)/i.test(href) ||
+      /itinéraire google maps|google maps/i.test(label);
+
+    if (isPhone) sendEvent('contact_phone_click', link, { contact_method: 'phone' });
+    if (isAppointment) sendEvent('appointment_click', link, { appointment_method: isPhone ? 'phone' : 'online_or_page' });
+    if (/^mailto:/i.test(rawHref)) sendEvent('contact_email_click', link, { contact_method: 'email' });
+    if (isMaps) sendEvent('google_maps_click', link, { destination_type: 'directions' });
+    if (link.classList.contains('mobile-contact-reviews')) sendEvent('google_reviews_click', link);
   });
 })();
 
