@@ -56,6 +56,7 @@ const menu=document.querySelector('.mobile-menu');const nav=document.querySelect
     var isPhone = rawHref.toLowerCase().indexOf('tel:') === 0;
     var isAppointment = link.getAttribute('data-appointment-intent') === 'true' ||
       /rendez-vous|prendre rendez-vous|appointment|rdv/i.test(label) ||
+      /حجز\s*موعد|احجز|لحجز/i.test(label) ||
       lowerHref.indexOf('prendre-rendez-vous-gynecologue.html') !== -1 ||
       lowerHref.indexOf('lerdvmedical.tn') !== -1 ||
       lowerHref.indexOf('yesrdv.com') !== -1;
