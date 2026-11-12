@@ -6,7 +6,7 @@ Adresse prévue : <https://boujelbanemohamed.github.io/docteur-hager-gabsi/>.
 
 ## Déploiement
 
-Dans **Settings → Pages → Build and deployment**, la source est **Deploy from a branch**, branche `main`, dossier `/ (root)`. Le dépôt public est compatible avec GitHub Pages sur un compte gratuit. Actuellement, GitHub bloque les exécutions avec le message « account is locked due to a billing issue ». Vérifiez ce point dans les paramètres du compte si le site ne se publie pas.
+Dans **Settings → Pages → Build and deployment**, la source est **Deploy from a branch**, branche `main`, dossier `/ (root)`. Le dépôt public est compatible avec GitHub Pages sur un compte gratuit. Le statut du dernier build et de la publication est consultable dans l’onglet **Actions** du dépôt.
 
 La page d’accueil en français est `index.html`. Les autres pages sont `publications.html`, `questions.html`, `horaires.html` et `consultations.html`. Les versions arabe et anglaise sont dans `ar/` et `en/`. Aucun serveur ni installation n’est nécessaire.
 
