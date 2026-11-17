@@ -55,7 +55,7 @@ const menu=document.querySelector('.mobile-menu');const nav=document.querySelect
     var label = ((link.textContent || '') + ' ' + (link.getAttribute('aria-label') || '')).toLowerCase();
     var isPhone = rawHref.toLowerCase().indexOf('tel:') === 0;
     var isAppointment = link.getAttribute('data-appointment-intent') === 'true' ||
-      /rendez-vous|prendre rendez-vous|appointment|rdv/i.test(label) ||
+      /(?:prendre|demander|réserver)\s+(?:un\s+)?rendez-vous|rendez-vous\s+par\s+téléphone|book an appointment|call to book|schedule an appointment|request an appointment|rdv/i.test(label) ||
       /حجز\s*موعد|احجز|لحجز/i.test(label) ||
       lowerHref.indexOf('prendre-rendez-vous-gynecologue.html') !== -1 ||
       lowerHref.indexOf('lerdvmedical.tn') !== -1 ||
